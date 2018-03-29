@@ -75,7 +75,7 @@ func main() {
 
 ## Author
 
-* **Bryce Mullen** - *Project Manager*  @Wedgenix connect [here](www.linkedin.com/in/bryce-mullen).
+* **Bryce Mullen** - *Project Manager*  @Wedgenix connect [here](https://www.linkedin.com/in/bryce-mullen).
 
 ## License
 

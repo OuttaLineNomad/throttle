@@ -5,33 +5,33 @@ import (
 	"time"
 )
 
-// Bucket for LeakyBucket() set Size, Rate, and channel to control flow
+// Bucket for LeakyBucket set Size, Rate, and channel to control flow
 type Bucket struct {
 	Size      int
 	Rate      time.Duration
-	Regulator chan bool
+	regulator chan bool
 }
 
 // LeakyBucket creates a Bucket with a rate to regulate api calls.
 func LeakyBucket(size int, rate time.Duration) *Bucket {
 	buk := &Bucket{
 		Size:      size,
-		Regulator: make(chan bool, size),
+		regulator: make(chan bool, size),
 		Rate:      rate,
 	}
 
-	for i := 0; i < cap(buk.Regulator); i++ {
-		buk.Regulator <- true
+	for i := 0; i < cap(buk.regulator); i++ {
+		buk.regulator <- true
 	}
 
 	go (func(buk *Bucket, rate time.Duration) {
 		drop := time.Tick(rate)
 		for {
-			bukLen := len(buk.Regulator)
+			bukLen := len(buk.regulator)
 			select {
 			case <-drop:
-				if bukLen < cap(buk.Regulator) {
-					buk.Regulator <- true
+				if bukLen < cap(buk.regulator) {
+					buk.regulator <- true
 				}
 			}
 		}
@@ -42,7 +42,7 @@ func LeakyBucket(size int, rate time.Duration) *Bucket {
 
 // Take takes one token from Bucket if there is one to take, if not it waits until it can take one.
 func (buk *Bucket) Take() {
-	<-buk.Regulator
+	<-buk.regulator
 }
 
 // TakeN takes n amount of tokens, if n amount is not found thant waits until it can take all.
@@ -51,10 +51,10 @@ func (buk *Bucket) TakeN(n int) error {
 	if n > buk.Size {
 		return &Error{"TakeN", "taking n tokens out of bucket", errors.New("n exceeds the amount of bucket size")}
 	}
-	lenReg := len(buk.Regulator)
+	lenReg := len(buk.regulator)
 	if n <= lenReg {
 		for i := 0; i < n; i++ {
-			<-buk.Regulator
+			<-buk.regulator
 		}
 		return nil
 	}
@@ -63,7 +63,7 @@ func (buk *Bucket) TakeN(n int) error {
 	wait := time.Duration(needed) * buk.Rate
 	time.Sleep(wait)
 	for i := 0; i < n; i++ {
-		<-buk.Regulator
+		<-buk.regulator
 	}
 	return nil
 }

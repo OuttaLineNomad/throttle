@@ -1,10 +1,34 @@
-// Package throttle allows users to use different functions to
-// keep with different api throttling policies.
+// Copyright 2018 Bryce Mullen. All rights reserved.
+// Use of this source code is governed by a Apache-2.0
+// license that can be found in the LICENSE file.
+// Package throttle helps control API calls to webservices.
+// Allowing programmers to choose different ways to throttle their calls
+// to adhere to the throttling policies of certain APIs.
 //
-// Use LeakyBucket to make calls to web services that
-// require a leaky bucket algorithm.
+// API calls to a webservice are generally throttled. Different policies
+// are used, this package helps follow the most used polices.
 //
-// Use ExpBackoff if you need an exponential backoff call.
+// Leaky Bucket
+//
+// Leaky Bucket or Token Bucket Algorithm is when a service sets a limit
+// on a steady rate and bust request amount. The burst is the size of the
+// bucket, and the rate is how cast that bucket will fill. When API calls
+// exceed the steady rate and bucket size the service sends some type of
+// error.
+//
+// LeakyBucket function takes two parameters:
+//      size: size of bucket of burst requests allowed
+//      rate: what rate the bucket fills.
+//
+// Exponential Backoff
+//
+// This is less of a webservice throttling policy and more of calling policy.
+// Exponential Backoff calls API at a random and exponentially growing time until
+// the call is successful or the MaxWait time is hit.
+//
+// ExpBackoff is a method. Start it then use Run with one parameter:
+//      f: f is a funciton that returns an error. See examples for more details.
+// 	MaxWait: the max time the function will keep retrying the call.
 //
 package throttle
 

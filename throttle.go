@@ -24,7 +24,7 @@
 // the call is successful or the MaxWait time is hit.
 //
 // ExpBackoff is a method. Start it then use Run with one parameter:
-//      f: f is a funciton that returns an error. See examples for more details.
+//      f: f is a function that returns an error. See examples for more details.
 // 	MaxWait: the max time the function will keep retrying the call.
 //
 package throttle

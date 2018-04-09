@@ -1,6 +1,3 @@
-// Copyright 2018 Bryce Mullen. All rights reserved.
-// Use of this source code is governed by a Apache-2.0
-// license that can be found in the LICENSE file.
 // Package throttle helps control API calls to webservices.
 // Allowing programmers to choose different ways to throttle their calls
 // to adhere to the throttling policies of certain APIs.

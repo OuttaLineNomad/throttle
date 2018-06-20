@@ -45,6 +45,11 @@ func (buk *Bucket) Take() {
 	<-buk.regulator
 }
 
+// BucketSize gives you how many tokens are in bucket.
+func (buk *Bucket) BucketSize() int {
+	return len(buk.regulator)
+}
+
 // TakeN takes n amount of tokens, if n amount is not found thant waits until it can take all.
 // n cannot exceed the amount of Bucket size.
 func (buk *Bucket) TakeN(n int) error {

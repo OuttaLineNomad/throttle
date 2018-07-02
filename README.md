@@ -2,7 +2,7 @@
 
 ## Overview
 
-Package throttle allows users to use functions to keep with different API throttling policies.
+This library allows users to use functions to keep with different API throttling policies.
 
 Use LeakyBucket to make calls to web services that require a leaky bucket algorithm, and use ExpBackoff if you need an exponential backoff call.
 
@@ -79,4 +79,4 @@ func main() {
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the AP2 License - see the [LICENSE](LICENSE) file for details

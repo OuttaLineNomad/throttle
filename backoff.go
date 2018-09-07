@@ -2,7 +2,6 @@ package throttle
 
 import (
 	"errors"
-	"fmt"
 	"math"
 	"math/rand"
 	"time"
@@ -41,18 +40,15 @@ func (bo *Backoff) Run(f func() error) error {
 	attempts := 0.0
 	for wait < bo.MaxWait {
 		err := f()
-		if err != nil {
-			if noGo, ok := err.(*NoGosErrors); ok {
-				fmt.Println("throttle: NoGosErrors cast was ok")
-				return &Error{`Run`, `hit nogo error`, noGo.Err}
-			} else {
-				fmt.Println("throttle" + err.Error())
-			}
-			wait = time.Duration(int(math.Pow(2, attempts)+float64(bo.random.Intn(1000)))) * time.Millisecond
-			time.Sleep(wait)
-			attempts++
+		if err == nil {
+			return nil
 		}
-		return nil
+		if noGo, ok := err.(*NoGosErrors); ok {
+			return &Error{`Run`, `hit nogo error`, noGo.Err}
+		}
+		wait = time.Duration(int(math.Pow(2, attempts)+float64(bo.random.Intn(1000)))) * time.Millisecond
+		time.Sleep(wait)
+		attempts++
 	}
 	return &Error{`Run`, `tried function`, errors.New("max wait time hit")}
 }

@@ -31,8 +31,8 @@ package throttle
 
 // Error type to share error messages from package.
 type Error struct {
-	Msg  string
 	Func string
+	Msg  string
 	Err  error
 }
 
